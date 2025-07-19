@@ -54,6 +54,11 @@ Repeat steps from 5 for views, URLs, and templates in the new app.
 ```bash
 pip install django-tailwind
 pip install django-browser-reload
+pip install 'django-tailwind[reload]'
+```
+Also add this line in `urls.py`:
+```python
+path('__reload__/', include('django_browser_reload.urls')),
 ```
 
 #### b. Register Tailwind App
@@ -122,3 +127,53 @@ python manage.py runserver
 ```bash
 python manage.py tailwind start
 ```
+
+### 8. Create a Sample Model and add this to Handle Media `settings.py`
+
+```python
+# Media Folders
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+```
+
+### 9. Make some Configurations in `urls.py`
+```python
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    # ... your url patterns
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+### 10. Make Migrations and Migrate
+```bash
+python manage.py makemigrations
+python manage.py migrate
+```
+#### Install Sqlite Viewer for viewing the database in VsCode here's the link [SQLite Viewer](https://marketplace.visualstudio.com/items?itemName=qwtel.sqlite-viewer).
+
+### 11. Adding the Model's to Admin Panel
+In your app's `admin.py`, register your models:
+```python
+from django.contrib import admin
+from .models import YourModel
+admin.site.register(YourModel)
+```
+### 12. Create a Superuser
+```bash
+python manage.py createsuperuser
+```
+Now access the admin panel at `http://127.0.0.1:8000/admin` with the superuser credentials.
+
+In case you forgot the superuser password, you can reset it using:
+```bash
+python manage.py changepassword <username>
+```
+
+
+> **Your Django project is now set up with Tailwind CSS for styling!  
+> Start building your application using Tailwind's powerful utility-first CSS framework.  
+> For advanced configurations and customizations, refer to the [Tailwind documentation](https://tailwindcss.com/docs).**
+>
+> **With a data model and media handling (like image uploads), you can easily manage media files in your Django app.**
